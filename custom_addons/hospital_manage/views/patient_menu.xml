@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_hospital_patient_tree" model="ir.ui.view">
+    <field name="name">hospital.patient.tree</field>
+    <field name="model">hospital.patient</field>
+    <field name="arch" type="xml">
+        <list string="Patients">
+            <field name="name"/>
+            <field name="age" optional="hide"/>
+            <field name="gender" optional="show"/>
+            <field name="email"/>
+            <field name="phone"/>
+            <field name="doctor_Id" widget="many2one" options="{'no_open': 1}"/>
+            <field name="stage"/>
+           <header>
+                <button name="action_set_draft" string="Draft" type="object" class="oe_highlight"/>
+                <button name="action_set_active" string="Active" type="object" class="oe_highlight"/>
+                <button name="action_set_to_approve" string="To Approve" type="object" class="oe_highlight"/>
+                <button name="action_set_approved" string="Approved" type="object" class="oe_highlight"/>
+                <button name="action_set_closed" string="Closed" type="object" class="oe_highlight"/>
+<!--               <button name="action_open_send_mail_wizard" string="Send Mail"-->
+<!--                        type="object" class="oe_highlight" invisible="stage != 'to_approve'"/>-->
+            </header>
+        </list>
+<!--         <list string="Patients">-->
+<!--            <header>-->
+<!--                <button name="action_set_draft" string="Draft" type="object" class="oe_highlight"/>-->
+<!--                <button name="action_set_active" string="Active" type="object" class="oe_highlight"/>-->
+<!--                <button name="action_set_to_approve" string="To Approve" type="object" class="oe_highlight"/>-->
+<!--                <button name="action_set_approved" string="Approved" type="object" class="oe_highlight"/>-->
+<!--                <button name="action_set_closed" string="Closed" type="object" class="oe_highlight"/>-->
+<!--            </header>-->
+<!--        </list>-->
+    </field>
+
+
+    </record>
+    <record id="view_hospital_patient_form" model="ir.ui.view">
+    <field name="name">hospital.patient.form</field>
+    <field name="model">hospital.patient</field>
+    <field name="arch" type="xml">
+        <form string="Patient">
+            <div class="oe_button_box" name="button_box"></div>
+
+            <sheet>
+<!--                <header>-->
+<!--                &lt;!&ndash; Display the current stage as a status bar &ndash;&gt;-->
+<!--                <field name="stage" widget="statusbar" statusbar_visible="draft,active,to_approve,approved,closed" />-->
+
+<!--                &lt;!&ndash; Functional buttons for changing stage &ndash;&gt;-->
+<!--&lt;!&ndash;              <button name="action_set_draft" string="Draft" type="object" class="oe_highlight" invisible="stage != 'draft'"/>&ndash;&gt;-->
+<!--                    <button name="action_set_active" string="Active" type="object" class="oe_highlight" invisible="stage != 'draft'"/>-->
+<!--                    <button name="action_set_to_approve" string="To Approve" type="object" class="oe_highlight" invisible="stage != 'active'"/>-->
+<!--                    <button name="action_open_send_mail_wizard" string="Send Mail" type="object" class="oe_highlight" invisible="stage != 'active'"/>-->
+
+<!--&lt;!&ndash;                    <button name="action_set_approved" string="Approved" type="object" class="oe_highlight" invisible="stage != 'to_approve'"/>&ndash;&gt;-->
+<!--                    <button name="action_set_closed" string="Close" type="object" invisible="stage == 'closed'"/>-->
+<!--            </header>-->
+                <header>
+    <field name="stage" widget="statusbar" statusbar_visible="draft,active,to_approve,approved,closed" />
+
+    <button name="action_set_active" string="Active" type="object" class="oe_highlight" invisible="stage != 'draft'"/>
+
+    <!-- Show 'Send Mail' only when stage is 'active' -->
+    <button name="action_open_send_mail_wizard" string="Send Mail" type="object" class="oe_highlight" invisible="stage != 'active'"/>
+
+    <!-- Show 'To Approve' only when stage is 'to_approve' -->
+    <button name="action_set_approved" string="Approve" type="object" class="oe_highlight" invisible="stage != 'to_approve'"/>
+
+    <!-- Show 'Approved' button only when stage is 'approved' -->
+    <button name="action_set_closed" string="Approved" type="object" class="oe_highlight" invisible="stage != 'approved'"/>
+</header>
+
+                <group>
+                    <field name="name"/>
+                    <field name="age" />
+                    <field name="gender" />
+                    <field name="email"/>
+                    <field name="phone"/>
+                    <field name="document"/>
+<!--                    <field name="doctor_Id" widget="many2one" options="{'no_open': 1}"/>-->
+                    <field name="patient_status"/>
+                    <field name="days" invisible="patient_status != 'active'"/>
+                </group>
+<!--                <group string="All Available Doctors">-->
+<!--                    <field name="all_doctors" widget="many2many_tags"/>-->
+<!--                </group>-->
+
+                <notebook>
+                    <page string="Doctor Details">
+                        <field name="all_doctors">
+                            <list editable="bottom">
+<!--&lt;!&ndash;                                  <field name="is_selected" widget="boolean"/>&ndash;&gt;-->
+                                <field name="is_selected"/>
+                                <field name="name"/>
+                                <field name="specialty"/>
+                                <field name="availability_status"/>
+                                <field name="treatment_start_date"/>
+                                <field name="treatment_end_date"/>
+                                <field name="days"/>
+
+                            </list>
+                        </field>
+<!--                        <field name="doctor_Id">-->
+<!--    <list editable="bottom">-->
+<!--        <field name="name"/>-->
+<!--        <field name="email"/>-->
+<!--        <field name="is_selected"/>-->
+<!--    </list>-->
+<!--</field>-->
+
+                    </page>
+                </notebook>
+            </sheet>
+        </form>
+    </field>
+</record>
+    <record id="view_hospital_patient_kanban" model="ir.ui.view">
+    <field name="name">hospital.patient.kanban</field>
+    <field name="model">hospital.patient</field>
+    <field name="arch" type="xml">
+        <kanban class="o_kanban_view">
+            <templates>
+                <t t-name="kanban-box">
+                    <div class="oe_kanban_global_click">
+                        <field name="name" class="o_kanban_record_title"/>
+                        <div><strong>Age:</strong> <field name="age"/></div>
+                        <div><strong>Gender:</strong> <field name="gender"/></div>
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+    </field>
+</record>
+
+
+    <record id="view_hospital_patient_search" model="ir.ui.view">
+    <field name="name">hospital.patient.search</field>
+    <field name="model">hospital.patient</field>
+    <field name="arch" type="xml">
+        <search>
+            <field name="name"/>
+            <field name="phone"/>
+            <field name="age"/>
+            <field name="gender"/>
+            <field name="email"/>
+            <field name="doctor_Id"/>
+
+
+            <filter name="male_filter" string="Male Patients" domain="[('gender', '=', 'male')]"/>
+            <filter name="female_filter" string="Female Patients" domain="[('gender', '=', 'female')]"/>
+            <filter name="other_filter" string="Other Gender" domain="[('gender', '=', 'other')]"/>
+
+            <filter name="age_below_18" string="Under 18" domain="[('age', '&lt;', 18)]"/>
+            <filter name="age_18_40" string="18-40" domain="[('age', '&gt;=', 18), ('age', '&lt;=', 40)]"/>
+            <filter name="age_above_40" string="Above 40" domain="[('age', '&gt;', 40)]"/>
+
+            <group string="Group By">
+                <filter name="group_by_gender" string="Gender" context="{'group_by': 'gender'}"/>
+                <filter name="group_by_doctor" string="Doctor" context="{'group_by': 'doctor_Id'}"/>
+            </group>
+        </search>
+    </field>
+</record>
+<!--    <record id="view_hospital_patient_tree" model="ir.ui.view">-->
+<!--    <field name="name">hospital.patient.tree</field>-->
+<!--    <field name="model">hospital.patient</field>-->
+<!--    <field name="arch" type="xml">-->
+<!--        <list string="Patients">-->
+<!--            <field name="name"/>-->
+<!--            <field name="stage"/>-->
+<!--        </list>-->
+<!--    </field>-->
+<!--</record>-->
+
+<!-- Action Window (Adding buttons at the top-right for list view) -->
+<!--<record id="action_hospital_patient" model="ir.actions.act_window">-->
+<!--    <field name="name">Patients</field>-->
+<!--    <field name="res_model">hospital.patient</field>-->
+<!--    <field name="view_mode">list,form</field>-->
+<!--    <field name="help" type="html">-->
+<!--        <p class="o_view_nocontent_smiling_face">Manage hospital patients and their statuses.</p>-->
+<!--    </field>-->
+<!--</record>-->
+
+<!-- Add Header Buttons in the Action Window -->
+<!--<record id="view_hospital_patient_header_buttons" model="ir.ui.view">-->
+<!--    <field name="name">hospital.patient.list.buttons</field>-->
+<!--    <field name="model">hospital.patient</field>-->
+<!--    <field name="arch" type="xml">-->
+
+<!--    </field>-->
+<!--</record>-->
+<!--   <record id="report_hospital_patient_action" model="ir.actions.report">-->
+<!--        <field name="name">Hospital Patient Report</field>-->
+<!--        <field name="model">hospital.patient</field>-->
+<!--        <field name="report_type">qweb-pdf</field>-->
+<!--        <field name="report_name">hospital_manage.report_hospital_patient</field>-->
+<!--    </record>-->
+
+    <record id="hospital_patient_action_menu" model="ir.ui.view">
+        <field name="name">hospital.patient.action</field>
+        <field name="model">hospital.patient</field>
+        <field name="inherit_id" ref="hospital_manage.view_hospital_patient_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/header" position="inside">
+                <button name="action_print_patient_report" type="object" string="Print" class="oe_highlight" icon="fa-print"/>
+            </xpath>
+        </field>
+    </record>
+<!--    <record id="hospital_patient_action_menu" model="ir.ui.view">-->
+<!--    <field name="name">hospital.patient.action</field>-->
+<!--    <field name="model">hospital.patient</field>-->
+<!--    <field name="inherit_id" ref="hospital_manage.view_hospital_patient_form"/>-->
+<!--    <field name="arch" type="xml">-->
+<!--        <xpath expr="//form/sheet/header/button[@name='action_delete']" position="after">-->
+<!--            <button name="action_print_patient_report" type="object" string="Print"-->
+<!--                icon="fa-print" class="dropdown-item"/>-->
+<!--        </xpath>-->
+<!--    </field>-->
+<!--</record>-->
+
+
+
+
+
+
+
+    <record id="action_hospital_patient" model="ir.actions.act_window">
+       <field name="name">Patients</field>
+       <field name="res_model">hospital.patient</field>
+       <field name="view_mode">list,kanban,form</field>
+       <field name="help" type="html">
+           <p class="o_view_nocontent_smiling_face">
+               create a new Patient
+           </p>
+       </field>
+   </record>
+
+</odoo>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+<template id="report_hospital_patient_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <main>
+                    <div class="oe_structure">
+                        <h2 style="text-align: center;">Patient Report</h2>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Name:</th>
+                                <td t-esc="doc.name or 'N/A'"/>
+                            </tr>
+                            <tr>
+                                <th>Age:</th>
+                                <td t-esc="doc.age or 'N/A'"/>
+                            </tr>
+                            <tr>
+                                <th>Gender:</th>
+                                <td t-esc="doc.gender or 'N/A'"/>
+                            </tr>
+                            <tr>
+                                <th>Email:</th>
+                                <td t-esc="doc.email or 'N/A'"/>
+                            </tr>
+                            <tr>
+                                <th>Phone:</th>
+                                <td t-esc="doc.phone or 'N/A'"/>
+                            </tr>
+                        </table>
+                                <h3 style="text-align: center; margin-top: 30px; margin-bottom: 15px;">Doctor Details</h3>
+                        <table class="table table-bordered" style="margin-bottom: 20px;">
+                            <thead>
+                                <tr>
+                                    <th style="padding: 10px; text-align: left;">Doctor Name</th>
+                                    <th style="padding: 10px; text-align: left;">Specialty</th>
+                                    <th style="padding: 10px; text-align: left;">Availability</th>
+                                    <th style="padding: 10px; text-align: left;">Treatment Start</th>
+                                    <th style="padding: 10px; text-align: left;">Treatment End</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.doctor_Id" t-as="doctor">
+                                    <tr>
+                                        <td style="padding: 10px;" t-esc="doctor.name or 'N/A'"/>
+                                        <td style="padding: 10px;" t-esc="doctor.specialty or 'N/A'"/>
+                                        <td style="padding: 10px;" t-esc="doctor.availability_status or 'N/A'"/>
+                                        <td style="padding: 10px;" t-esc="doctor.treatment_start_date or 'N/A'"/>
+                                        <td style="padding: 10px;" t-esc="doctor.treatment_end_date or 'N/A'"/>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </main>
+            </t>
+        </t>
+    </template>
+
+
+
+    <record id="report_hospital_patient" model="ir.actions.report">
+        <field name="name">Patient Report</field>
+        <field name="model">hospital.patient</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_file">hospital_manage.report_hospital_patient_template</field>
+        <field name="report_name">hospital_manage.report_hospital_patient_template</field>
+        <field name="print_report_name">'Patient_Report_' + object.name</field>
+    </record>
+</odoo>
