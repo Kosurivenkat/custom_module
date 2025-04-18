@@ -1,8 +1,8 @@
 import re
 # from typing import io
 
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
+# from reportlab.lib.pagesizes import letter
+# from reportlab.pdfgen import canvas
 
 from odoo import api,models, fields
 from odoo.exceptions import ValidationError
@@ -29,20 +29,20 @@ class HospitalPatient(models.Model):
     stage = fields.Selection([
         ('draft', 'Draft'),
         ('active', 'Active'),
+        ('to_approve', 'To Approve'),
         ('approved', 'Approved'),
         ('closed', 'Closed')
     ], string="Stage", default='draft', tracking=True)
+    patient_id = fields.Char(string="Patient ID", readonly=True, copy=False, default='New')
 
     @api.depends('doctor_Id')
     def _compute_doctor_selected(self):
-        """Mark doctor as selected if a doctor is assigned"""
         for record in self:
             record.doctor_selected = bool(record.doctor_Id)
 
 
     @api.constrains('email')
     def _check_email(self):
-        """Validate email format"""
         email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
         for record in self:
             if record.email and not re.match(email_regex, record.email):
@@ -50,7 +50,6 @@ class HospitalPatient(models.Model):
 
     @api.constrains('phone')
     def _check_phone(self):
-        """Validate phone format (Only numbers, length 10-15)"""
         phone_regex = r'^\+?\d{10,15}$'
         for record in self:
             if record.phone and not re.match(phone_regex, record.phone):
@@ -70,26 +69,11 @@ class HospitalPatient(models.Model):
 
     def action_set_closed(self):
         self.stage = 'closed'
-    #
-    # def action_open_send_mail_wizard(self):
-    #     """Open the wizard when clicking 'Send Mail' button"""
-    #     return {
-    #         'type': 'ir.actions.act_window',
-    #         'name': 'Send Email',
-    #         'res_model': 'hospital.mail.wizard',
-    #         'view_mode': 'form',
-    #         'view_id': False,
-    #         'target': 'new',
-    #         'context': {
-    #             'default_patient_id': self.id,
-    #         }
-    #     }
     def action_print_patient_report(self):
         return self.env.ref('hospital_manage.report_hospital_patient').report_action(self)
 
     # selected_doctors = fields.Many2many('hospital.doctors', string="Select Doctors")
     def action_open_send_mail_wizard(self):
-        """Opens the send mail wizard with patient and doctor details."""
         self.ensure_one()
 
         # Ensure we only include doctors with valid email addresses
@@ -107,6 +91,15 @@ class HospitalPatient(models.Model):
                 'default_selected_doctor_email': doctor_emails,
             },
         }
+
+    @api.model
+    def create(self, vals):
+        if vals.get('patient_id', 'New') == 'New':
+            vals['patient_id'] = self.env['ir.sequence'].next_by_code('hospital.patient') or 'New'
+        return super(HospitalPatient, self).create(vals)
+
+
+
 
 
 
