@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+       <record id="view_real_customers_tree" model="ir.ui.view">
+    <field name="name">real.customer.tree</field>
+    <field name="model">real.customer</field>
+    <field name="arch" type="xml">
+        <list string="Customers">
+            <field name="customer_name"/>
+            <field name="email_id"/>
+            <field name="phone"/>
+            <field name="selected_customer"/>
+            <field name="Address"/>
+             <field name="quoted_price"/>
+             <field name="final_price"/>
+             <field name="price_difference"/>
+
+        </list>
+    </field>
+    </record>
+
+<!--           <record id="view_real_customers_form" model="ir.ui.view">-->
+<!--    <field name="name">real.customer.form</field>-->
+<!--    <field name="model">real.customer</field>-->
+<!--    <field name="arch" type="xml">-->
+<!--        <form string="Customers">-->
+<!--            <field name="customer_name"/>-->
+<!--            <field name="email_id"/>-->
+<!--            <field name="phone"/>-->
+<!--            <field name="selected_customer"/>-->
+<!--            <field name="Address"/>-->
+<!--             <field name="quoted_price"/>-->
+<!--             <field name="final_price"/>-->
+<!--             <field name="price_difference"/>-->
+
+<!--        </form>-->
+<!--    </field>-->
+<!--    </record>-->
+
+
+
+
+        <record id="action_real_customer" model="ir.actions.act_window">
+       <field name="name">Customers</field>
+       <field name="res_model">real.customer</field>
+       <field name="view_mode">list,form</field>
+       <field name="help" type="html">
+           <p class="o_view_nocontent_smiling_face">
+               create a new property
+           </p>
+       </field>
+   </record>
+</odoo>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+<template id="report_saleorder_document_inherit_marketing_user" inherit_id="sale.report_saleorder_document">
+<xpath expr="//div[hasclass('row')][.//strong[contains(text(), 'Salesperson')]]" position="inside">
+<div class="col-auto">
+<strong>Marketing User:</strong>
+<span t-field="doc.marketing_user.name"/>
+</div>
+</xpath>
+</template>
+</odoo>
